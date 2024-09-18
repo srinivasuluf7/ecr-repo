@@ -47,7 +47,7 @@ jobs:
       id: taskdef
       run: |
         # Fetch the current task definition JSON
-        aws ecs describe-task-definition --task-definition task-defi-family > task-def.json
+        aws ecs describe-task-definition --task-definition ecs_task > task-def.json
         
         # Use jq to update the container image in the task definition JSON
         jq '.taskDefinition.containerDefinitions[0].image = "'${{ secrets.ECR_REPOSITORY_URI }}:latest'"' task-def.json > new-task-def.json
@@ -58,4 +58,4 @@ jobs:
     - name: Update ECS Service
       run: |
         # Update the ECS service to use the new task definition revision
-        aws ecs update-service --cluster ecr-push-image --service deploy-service --force-new-deployment  
+        aws ecs update-service --cluster my-cluster --service ecs_service --force-new-deployment  
