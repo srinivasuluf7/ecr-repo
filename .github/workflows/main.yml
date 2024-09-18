@@ -43,18 +43,9 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}
 
-    - name: Update ECS Task Definition with new image
-      id: taskdef
-      run: |
-        # Fetch the current task definition JSON
-        aws ecs describe-task-definition --task-definition ecs_task > task-def.json
-        
-        # Use jq to update the container image in the task definition JSON
-        jq '.taskDefinition.containerDefinitions[0].image = "'${{ secrets.ECR_REPOSITORY_URI }}:latest'"' task-def.json > new-task-def.json
-        
-        # Register the updated task definition
-        aws ecs register-task-definition --cli-input-json file://new-task-def.json
-
+   
+      
+      
     - name: Update ECS Service
       run: |
         # Update the ECS service to use the new task definition revision
